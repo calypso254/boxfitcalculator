@@ -1,0 +1,60 @@
+﻿{
+  "boxes": [
+    {
+      "id": "mailer-6-4-4",
+      "name": "Small Mailer 6 x 4 x 4 in",
+      "l": 6,
+      "w": 4,
+      "h": 4,
+      "unit": "in"
+    },
+    {
+      "id": "mailer-8-6-4",
+      "name": "Mailer 8 x 6 x 4 in",
+      "l": 8,
+      "w": 6,
+      "h": 4,
+      "unit": "in"
+    },
+    {
+      "id": "ship-12-10-8",
+      "name": "Shipping 12 x 10 x 8 in",
+      "l": 12,
+      "w": 10,
+      "h": 8,
+      "unit": "in"
+    },
+    {
+      "id": "ship-14-10-8",
+      "name": "Shipping 14 x 10 x 8 in",
+      "l": 14,
+      "w": 10,
+      "h": 8,
+      "unit": "in"
+    },
+    {
+      "id": "ship-16-12-10",
+      "name": "Shipping 16 x 12 x 10 in",
+      "l": 16,
+      "w": 12,
+      "h": 10,
+      "unit": "in"
+    },
+    {
+      "id": "euro-35-25-15",
+      "name": "Euro Carton 35 x 25 x 15 cm",
+      "l": 35,
+      "w": 25,
+      "h": 15,
+      "unit": "cm"
+    },
+    {
+      "id": "euro-40-30-20",
+      "name": "Euro Carton 40 x 30 x 20 cm",
+      "l": 40,
+      "w": 30,
+      "h": 20,
+      "unit": "cm"
+    }
+  ]
+}

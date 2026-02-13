@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BoxFit Calculator | 3D Box Packing Tool</title>
+  <meta name="description" content="BoxFitCalculator.com helps you check if items fit in a box and find the smallest candidate box using deterministic 3D packing with rotations, padding, and quantity support.">
+  <meta property="og:title" content="BoxFit Calculator">
+  <meta property="og:description" content="Fit check and smallest-box finder for 3D package planning.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://boxfitcalculator.com/">
+  <meta property="og:site_name" content="BoxFit Calculator">
+  <link rel="canonical" href="https://boxfitcalculator.com/">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- ADSENSE PLACEHOLDER START -->
+  <!--
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+  -->
+  <!-- ADSENSE PLACEHOLDER END -->
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>BoxFit Calculator</h1>
+      <p>Check whether items fit in a box, or find the smallest box that fits.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel" aria-labelledby="modeHeading">
+      <h2 id="modeHeading">Mode</h2>
+      <div class="mode-tabs" role="tablist" aria-label="Calculator mode">
+        <button id="fitModeTab" type="button" class="tab active" data-mode="fit" role="tab" aria-selected="true" aria-controls="fitPanel">Fit Check</button>
+        <button id="finderModeTab" type="button" class="tab" data-mode="finder" role="tab" aria-selected="false" aria-controls="finderPanel">Smallest Box Finder</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="globalHeading">
+      <h2 id="globalHeading">Global Settings</h2>
+      <div class="units-row" role="group" aria-label="Units">
+        <span class="units-title">Units</span>
+        <label class="unit-option"><input type="radio" name="units" value="in" checked> Inches</label>
+        <label class="unit-option"><input type="radio" name="units" value="cm"> Centimeters</label>
+      </div>
+    </section>
+
+    <section id="fitPanel" class="panel" role="tabpanel" aria-labelledby="fitModeTab">
+      <h2>Container Box</h2>
+      <h3>Custom Box</h3>
+      <div class="table-wrap container-table-wrap">
+        <table class="container-table">
+          <thead>
+            <tr>
+              <th scope="col">Length</th>
+              <th scope="col">Width</th>
+              <th scope="col">Height</th>
+              <th scope="col">Exterior Thickness</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="measure-input">
+                  <input id="fitContainerL" class="measure-number" type="number" min="0.01" step="0.01" value="12" inputmode="decimal">
+                  <span class="unit-suffix">in</span>
+                </div>
+              </td>
+              <td>
+                <div class="measure-input">
+                  <input id="fitContainerW" class="measure-number" type="number" min="0.01" step="0.01" value="10" inputmode="decimal">
+                  <span class="unit-suffix">in</span>
+                </div>
+              </td>
+              <td>
+                <div class="measure-input">
+                  <input id="fitContainerH" class="measure-number" type="number" min="0.01" step="0.01" value="8" inputmode="decimal">
+                  <span class="unit-suffix">in</span>
+                </div>
+              </td>
+              <td>
+                <div class="measure-input">
+                  <input id="paddingInput" class="measure-number" type="number" min="0" step="0.001" value="0.125" inputmode="decimal">
+                  <span class="unit-suffix">in</span>
+                </div>
+              </td>
+              <td><button id="applyCustomBtn" type="button" class="btn secondary">Apply</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="field-help">If using exterior dimensions, input the width of the box so that we're calculating the interior space only.</p>
+
+      <h3>Box Presets</h3>
+      <div class="table-wrap container-table-wrap">
+        <table class="container-table">
+          <thead>
+            <tr>
+              <th scope="col">Box Presets</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="measure-input">
+                  <select id="presetSelect" class="measure-select" aria-describedby="presetStatus">
+                    <option value="">Loading presets...</option>
+                  </select>
+                </div>
+              </td>
+              <td><button id="applyPresetBtn" type="button" class="btn secondary">Apply Preset</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p id="presetStatus" class="field-help" aria-live="polite"></p>
+    </section>
+
+    <section id="finderPanel" class="panel hidden" role="tabpanel" aria-labelledby="finderModeTab">
+      <h2>Candidate Boxes</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Length</th>
+              <th scope="col">Width</th>
+              <th scope="col">Height</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody id="candidateRows"></tbody>
+        </table>
+      </div>
+      <button id="addCandidateBtn" type="button" class="btn secondary">Add Candidate Box</button>
+    </section>
+
+    <section class="panel" aria-labelledby="itemsHeading">
+      <h2 id="itemsHeading">Items</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Length</th>
+              <th scope="col">Width</th>
+              <th scope="col">Height</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody id="itemRows"></tbody>
+        </table>
+      </div>
+      <button id="addItemBtn" type="button" class="btn secondary">Add Item</button>
+    </section>
+
+    <section class="panel">
+      <div class="actions">
+        <button id="calculateBtn" type="button" class="btn primary">Calculate</button>
+        <button id="resetBtn" type="button" class="btn ghost">Reset</button>
+      </div>
+      <div id="formErrors" class="errors" role="alert" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="resultsHeading">
+      <h2 id="resultsHeading">Results</h2>
+
+      <div class="ad-slot" aria-label="Advertisement slot above results">Ad Slot (Above Results)</div>
+
+      <div id="resultSummary" class="result-summary muted">Run a calculation to see results.</div>
+
+      <div id="rankingSection" class="hidden">
+        <h3>Candidate Ranking</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Candidate</th>
+                <th scope="col">Volume</th>
+                <th scope="col">Fits</th>
+                <th scope="col">Efficiency</th>
+              </tr>
+            </thead>
+            <tbody id="rankingRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="placementSection" class="hidden">
+        <h3>Placed Item Orientations</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Copy</th>
+                <th scope="col">Position (x, y, z)</th>
+                <th scope="col">Orientation (L x W x H)</th>
+              </tr>
+            </thead>
+            <tbody id="placementRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="visualSection" class="hidden">
+        <h3>2D Layer Slice</h3>
+        <div class="inline-row">
+          <label for="layerSelect">Layer</label>
+          <select id="layerSelect"></select>
+        </div>
+        <canvas id="layoutCanvas" width="960" height="540" aria-label="Packing layout layer view"></canvas>
+
+        <h3>3D Visualization</h3>
+        <div class="viz-controls">
+          <div>
+            <label for="yawRange">Rotate</label>
+            <input id="yawRange" type="range" min="-180" max="180" step="1" value="-35">
+          </div>
+          <div>
+            <label for="pitchRange">Tilt</label>
+            <input id="pitchRange" type="range" min="5" max="85" step="1" value="24">
+          </div>
+        </div>
+        <canvas id="layout3dCanvas" width="960" height="540" aria-label="3D packing view"></canvas>
+        <ul id="legendList" class="legend"></ul>
+      </div>
+
+      <div class="ad-slot" aria-label="Advertisement slot below results">Ad Slot (Below Results)</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-line">BoxFitCalculator.com</p>
+      <p class="footer-line">&copy; <span id="year"></span> Calypso Pixels</p>
+    </div>
+  </footer>
+
+  <script src="packer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
