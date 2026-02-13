@@ -33,6 +33,7 @@
   <main class="container">
     <section class="panel" aria-labelledby="modeHeading">
       <h2 id="modeHeading">Mode</h2>
+      <p class="section-help">Step 1: Choose what you want to do. Use <strong>Fit Check</strong> to test one box, or <strong>Smallest Box Finder</strong> to compare several box sizes.</p>
       <div class="mode-tabs" role="tablist" aria-label="Calculator mode">
         <button id="fitModeTab" type="button" class="tab active" data-mode="fit" role="tab" aria-selected="true" aria-controls="fitPanel">Fit Check</button>
         <button id="finderModeTab" type="button" class="tab" data-mode="finder" role="tab" aria-selected="false" aria-controls="finderPanel">Smallest Box Finder</button>
@@ -41,6 +42,7 @@
 
     <section class="panel" aria-labelledby="globalHeading">
       <h2 id="globalHeading">Global Settings</h2>
+      <p class="section-help">Step 2: Select your measurement units. All size fields and labels will update to match your choice.</p>
       <div class="units-row" role="group" aria-label="Units">
         <span class="units-title">Units</span>
         <label class="unit-option"><input type="radio" name="units" value="in" checked> Inches</label>
@@ -50,8 +52,9 @@
 
     <section id="fitPanel" class="panel" role="tabpanel" aria-labelledby="fitModeTab">
       <h2>Container Box</h2>
+      <p class="section-help">Step 3: Enter your box size manually, or pick a preset and apply it. Use exterior thickness so the calculator can estimate usable interior space.</p>
       <h3>Custom Box</h3>
-      <div class="table-wrap container-table-wrap">
+      <div class="table-wrap">
         <table class="container-table">
           <thead>
             <tr>
@@ -96,7 +99,7 @@
       <p class="field-help">If using exterior dimensions, input the width of the box so that we're calculating the interior space only.</p>
 
       <h3>Box Presets</h3>
-      <div class="table-wrap container-table-wrap">
+      <div class="table-wrap">
         <table class="container-table">
           <thead>
             <tr>
@@ -123,6 +126,7 @@
 
     <section id="finderPanel" class="panel hidden" role="tabpanel" aria-labelledby="finderModeTab">
       <h2>Candidate Boxes</h2>
+      <p class="section-help">Step 3 (Finder Mode): Add each box size you are considering buying. The tool will rank them and choose the smallest that fits everything.</p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -141,6 +145,7 @@
 
     <section class="panel" aria-labelledby="itemsHeading">
       <h2 id="itemsHeading">Items</h2>
+      <p class="section-help">Step 4: Add each product size and how many of that product go in the shipment.</p>
       <div class="table-wrap">
         <table>
           <thead>
@@ -159,6 +164,7 @@
     </section>
 
     <section class="panel">
+      <p class="section-help">Step 5: Click <strong>Calculate</strong> to see whether your items fit and how efficiently the box space is used.</p>
       <div class="actions">
         <button id="calculateBtn" type="button" class="btn primary">Calculate</button>
         <button id="resetBtn" type="button" class="btn ghost">Reset</button>
@@ -166,10 +172,13 @@
       <div id="formErrors" class="errors" role="alert" aria-live="polite"></div>
     </section>
 
+    <section class="panel ad-panel" aria-label="Advertisement section above results">
+      <div class="ad-slot" aria-label="Advertisement slot above results">Ad Slot (Above Results)</div>
+    </section>
+
     <section class="panel" aria-labelledby="resultsHeading">
       <h2 id="resultsHeading">Results</h2>
-
-      <div class="ad-slot" aria-label="Advertisement slot above results">Ad Slot (Above Results)</div>
+      <p class="section-help">Step 6: Review the result summary, then check the visualizer to confirm your item arrangement.</p>
 
       <div id="resultSummary" class="result-summary muted">Run a calculation to see results.</div>
 
@@ -209,28 +218,43 @@
       </div>
 
       <div id="visualSection" class="hidden">
-        <h3>2D Layer Slice</h3>
-        <div class="inline-row">
-          <label for="layerSelect">Layer</label>
-          <select id="layerSelect"></select>
-        </div>
-        <canvas id="layoutCanvas" width="960" height="540" aria-label="Packing layout layer view"></canvas>
+        <div class="viz-grid">
+          <div class="viz-col">
+            <h3>3D Visualization</h3>
+            <p class="section-help">Drag the 3D view to rotate and inspect how items are arranged.</p>
+            <div class="viz-controls">
+              <div>
+                <label for="yawRange">Rotate</label>
+                <input id="yawRange" type="range" min="-180" max="180" step="1" value="-35">
+              </div>
+              <div>
+                <label for="pitchRange">Tilt</label>
+                <input id="pitchRange" type="range" min="5" max="85" step="1" value="24">
+              </div>
+            </div>
+            <canvas id="layout3dCanvas" width="960" height="540" aria-label="3D packing view"></canvas>
 
-        <h3>3D Visualization</h3>
-        <div class="viz-controls">
-          <div>
-            <label for="yawRange">Rotate</label>
-            <input id="yawRange" type="range" min="-180" max="180" step="1" value="-35">
+            <label class="toggle-row" for="show2DToggle">
+              <input id="show2DToggle" type="checkbox">
+              Show 2D layer view (advanced)
+            </label>
           </div>
-          <div>
-            <label for="pitchRange">Tilt</label>
-            <input id="pitchRange" type="range" min="5" max="85" step="1" value="24">
+
+          <div id="viz2dCol" class="viz-col hidden">
+            <h3>2D Layer Slice</h3>
+            <p class="section-help">Use this advanced view to inspect one horizontal layer at a time.</p>
+            <div class="inline-row">
+              <label for="layerSelect">Layer</label>
+              <select id="layerSelect"></select>
+            </div>
+            <canvas id="layoutCanvas" width="960" height="540" aria-label="Packing layout layer view"></canvas>
           </div>
         </div>
-        <canvas id="layout3dCanvas" width="960" height="540" aria-label="3D packing view"></canvas>
         <ul id="legendList" class="legend"></ul>
       </div>
+    </section>
 
+    <section class="panel ad-panel" aria-label="Advertisement section below results">
       <div class="ad-slot" aria-label="Advertisement slot below results">Ad Slot (Below Results)</div>
     </section>
   </main>

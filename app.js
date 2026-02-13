@@ -61,6 +61,8 @@
     placeSec: document.getElementById("placementSection"),
     placeRows: document.getElementById("placementRows"),
     visSec: document.getElementById("visualSection"),
+    show2DToggle: document.getElementById("show2DToggle"),
+    viz2dCol: document.getElementById("viz2dCol"),
     layer: document.getElementById("layerSelect"),
     canvas2d: document.getElementById("layoutCanvas"),
     canvas3d: document.getElementById("layout3dCanvas"),
@@ -89,6 +91,10 @@
     el.applyPreset.addEventListener("click", applyPreset);
     el.applyCustom.addEventListener("click", applyCustomBox);
     el.layer.addEventListener("change", redrawVisuals);
+    el.show2DToggle.addEventListener("change", function () {
+      apply2DToggleVisibility();
+      redrawVisuals();
+    });
 
     Array.prototype.forEach.call(el.units, function (radio) {
       radio.addEventListener("change", onUnitsChange);
@@ -117,6 +123,7 @@
     });
 
     bind3dDrag();
+    window.addEventListener("resize", redrawVisuals);
   }
 
   function bind3dDrag() {
@@ -268,6 +275,8 @@
     state.view3d.pitch = 24;
     el.yawRange.value = "-35";
     el.pitchRange.value = "24";
+    el.show2DToggle.checked = false;
+    apply2DToggleVisibility();
 
     updateUnitSuffixes();
     clearResults();
@@ -583,6 +592,7 @@
     el.visSec.classList.add("hidden");
     el.layer.innerHTML = "";
     el.legend.innerHTML = "";
+    apply2DToggleVisibility();
 
     var ctx2d = el.canvas2d.getContext("2d");
     ctx2d.clearRect(0, 0, el.canvas2d.width, el.canvas2d.height);
@@ -719,7 +729,9 @@
     });
 
     renderLegend(pack.placements, unit);
-    drawLayer2d(pack.container, pack.placements, layers[0], unit);
+    if (el.show2DToggle.checked) {
+      drawLayer2d(pack.container, pack.placements, layers[0], unit);
+    }
     draw3d(pack.container, pack.placements, unit);
   }
 
@@ -732,17 +744,30 @@
     var unit = state.result.unit;
     var layerZ = Number(el.layer.value);
 
-    drawLayer2d(pack.container, pack.placements, layerZ, unit);
+    if (el.show2DToggle.checked) {
+      drawLayer2d(pack.container, pack.placements, layerZ, unit);
+    }
     draw3d(pack.container, pack.placements, unit);
   }
 
+  function apply2DToggleVisibility() {
+    var show2D = Boolean(el.show2DToggle && el.show2DToggle.checked);
+    el.viz2dCol.classList.toggle("hidden", !show2D);
+    el.layer.disabled = !show2D;
+  }
+
   function drawLayer2d(container, placements, layerZ, unit) {
+    resizeCanvasToDisplay(el.canvas2d, 16 / 9);
+
     var ctx = el.canvas2d.getContext("2d");
     ctx.clearRect(0, 0, el.canvas2d.width, el.canvas2d.height);
 
-    var pad = 48;
+    var pad = Math.max(20, Math.min(48, Math.round(el.canvas2d.width * 0.06)));
     var drawW = el.canvas2d.width - (pad * 2);
     var drawH = el.canvas2d.height - (pad * 2);
+    if (drawW <= 0 || drawH <= 0) {
+      return;
+    }
     var scale = Math.min(drawW / container.l, drawH / container.w);
     var boxW = container.l * scale;
     var boxH = container.w * scale;
@@ -847,6 +872,8 @@
   }
 
   function draw3d(container, placements, unit) {
+    resizeCanvasToDisplay(el.canvas3d, 16 / 9);
+
     var ctx = el.canvas3d.getContext("2d");
     ctx.clearRect(0, 0, el.canvas3d.width, el.canvas3d.height);
 
@@ -862,7 +889,7 @@
 
     var cx = el.canvas3d.width / 2;
     var cy = el.canvas3d.height / 2;
-    var scale = Math.min(el.canvas3d.width, el.canvas3d.height) * 0.86;
+    var scale = Math.min(el.canvas3d.width, el.canvas3d.height) * 0.98;
     var cameraDistance = 3.1;
 
     var faces = [];
@@ -906,6 +933,23 @@
     ctx.font = "13px Segoe UI";
     ctx.fillText("3D view: drag to rotate. Rotate " + Math.round(state.view3d.yaw) + "°, tilt " + Math.round(state.view3d.pitch) + "°", 14, 22);
     ctx.fillText("Units: " + unit, 14, 40);
+  }
+
+  function resizeCanvasToDisplay(canvas, ratio) {
+    if (!canvas) {
+      return;
+    }
+
+    var targetWidth = Math.floor(canvas.clientWidth);
+    if (!targetWidth || targetWidth < 1) {
+      return;
+    }
+
+    var targetHeight = Math.max(180, Math.floor(targetWidth / ratio));
+    if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+    }
   }
 
   function transformAndProject(vertices, center, maxDim, yaw, pitch, cx, cy, scale, cameraDistance) {
