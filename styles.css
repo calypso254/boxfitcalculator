@@ -90,16 +90,10 @@ body > * {
 
 .brand-logo-icon {
   width: 100%;
-  max-width: min(32vw, 140px);
+  max-width: 10vw;
   height: auto;
   display: block;
   margin: 0 auto 0.45rem;
-}
-
-@media (min-width: 768px) {
-  .brand-logo-icon {
-    max-width: min(20vw, 200px);
-  }
 }
 
 .site-footer {
