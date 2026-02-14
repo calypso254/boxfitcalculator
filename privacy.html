@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | Box Fit Calculator</title>
+  <meta name="description" content="Privacy Policy for Box Fit Calculator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      min-height: auto;
+    }
+
+    body::before {
+      display: none;
+    }
+
+    .privacy-wrap {
+      width: min(900px, 94vw);
+      margin: 1rem auto;
+    }
+
+    .privacy-content {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .privacy-content p,
+    .privacy-content li {
+      color: var(--text);
+    }
+
+    .privacy-content ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .contact-gate {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 0.75rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .captcha-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .captcha-input {
+      width: 8ch;
+    }
+
+    .contact-result {
+      font-weight: 600;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <main class="privacy-wrap">
+    <section class="panel" aria-labelledby="privacyTitle">
+      <h1 id="privacyTitle">Privacy Policy</h1>
+      <div class="privacy-content">
+        <p><strong>Effective date:</strong> February 14, 2026</p>
+
+        <p>Box Fit Calculator does not collect personal information directly. This website uses third-party advertising services, including Google AdSense, which may use cookies, device identifiers, and similar technologies to show ads and measure ad performance.</p>
+
+        <p>These partners may collect or receive data from your browser or device as described in their own privacy policies. To learn how Google uses data when you use sites or apps that use Google services, visit:</p>
+
+        <ul>
+          <li><a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">How Google uses information from sites or apps that use Google services</a></li>
+          <li><a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">Google Ads Settings</a></li>
+        </ul>
+
+        <p>You can also disable or clear cookies through your browser settings.</p>
+
+        <div class="contact-gate" aria-live="polite">
+          <p>For policy questions, use the contact button below.</p>
+
+          <button id="revealContactBtn" type="button" class="btn secondary">Reveal contact email</button>
+
+          <div id="captchaPanel" class="hidden">
+            <p id="captchaPrompt">Human check:</p>
+            <div class="captcha-row">
+              <input id="captchaAnswer" class="captcha-input" type="number" inputmode="numeric" min="0" step="1" aria-label="Captcha answer">
+              <button id="captchaVerifyBtn" type="button" class="btn secondary">Verify</button>
+            </div>
+            <p id="captchaMessage" class="field-help"></p>
+          </div>
+
+          <p id="contactResult" class="contact-result hidden">
+            <a id="contactEmailLink" href="#"></a>
+          </p>
+        </div>
+
+        <p class="field-help">This flow reduces automated scraping by keeping the full address out of visible page content until a human check is passed.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var revealBtn = document.getElementById("revealContactBtn");
+      var captchaPanel = document.getElementById("captchaPanel");
+      var captchaPrompt = document.getElementById("captchaPrompt");
+      var captchaAnswer = document.getElementById("captchaAnswer");
+      var captchaVerifyBtn = document.getElementById("captchaVerifyBtn");
+      var captchaMessage = document.getElementById("captchaMessage");
+      var contactResult = document.getElementById("contactResult");
+      var contactEmailLink = document.getElementById("contactEmailLink");
+
+      var expected = null;
+
+      function newChallenge() {
+        var a = Math.floor(Math.random() * 7) + 3;
+        var b = Math.floor(Math.random() * 7) + 2;
+        expected = a + b;
+        captchaPrompt.textContent = "Human check: What is " + a + " + " + b + "?";
+        captchaAnswer.value = "";
+      }
+
+      function buildEmail() {
+        var localCodes = [99, 97, 108, 121, 112, 115, 111, 112, 105, 120, 101, 108, 115];
+        var domainCodes = [103, 109, 97, 105, 108, 46, 99, 111, 109];
+        var local = String.fromCharCode.apply(null, localCodes);
+        var domain = String.fromCharCode.apply(null, domainCodes);
+        return local + "@" + domain;
+      }
+
+      revealBtn.addEventListener("click", function () {
+        captchaPanel.classList.remove("hidden");
+        contactResult.classList.add("hidden");
+        newChallenge();
+      });
+
+      captchaVerifyBtn.addEventListener("click", function () {
+        var value = Number(captchaAnswer.value);
+        if (!Number.isFinite(value) || value !== expected) {
+          captchaMessage.textContent = "Not quite. Please try again.";
+          newChallenge();
+          return;
+        }
+
+        var email = buildEmail();
+        var subject = encodeURIComponent("Privacy Policy Question | Box Fit Calculator");
+        contactEmailLink.href = "mailto:" + email + "?subject=" + subject;
+        contactEmailLink.textContent = "Contact us";
+        contactResult.classList.remove("hidden");
+        captchaMessage.textContent = "Verified.";
+      });
+
+      captchaAnswer.addEventListener("keydown", function (ev) {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          captchaVerifyBtn.click();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

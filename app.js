@@ -69,7 +69,11 @@
     yawRange: document.getElementById("yawRange"),
     pitchRange: document.getElementById("pitchRange"),
     legend: document.getElementById("legendList"),
-    year: document.getElementById("year")
+    year: document.getElementById("year"),
+    privacyLink: document.getElementById("privacyPolicyLink"),
+    privacyModal: document.getElementById("privacyModal"),
+    privacyClose: document.getElementById("privacyModalClose"),
+    privacyFrame: document.getElementById("privacyFrame")
   };
 
   if (!window.BoxFitPacker) {
@@ -124,6 +128,47 @@
 
     bind3dDrag();
     window.addEventListener("resize", redrawVisuals);
+    bindPrivacyModal();
+  }
+
+  function bindPrivacyModal() {
+    if (!el.privacyLink || !el.privacyModal || !el.privacyClose) {
+      return;
+    }
+
+    el.privacyLink.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      openPrivacyModal();
+    });
+
+    el.privacyClose.addEventListener("click", function () {
+      closePrivacyModal();
+    });
+
+    el.privacyModal.addEventListener("click", function (ev) {
+      if (ev.target === el.privacyModal) {
+        closePrivacyModal();
+      }
+    });
+
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape" && !el.privacyModal.classList.contains("hidden")) {
+        closePrivacyModal();
+      }
+    });
+  }
+
+  function openPrivacyModal() {
+    if (el.privacyFrame) {
+      el.privacyFrame.src = "privacy.html";
+    }
+    el.privacyModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closePrivacyModal() {
+    el.privacyModal.classList.add("hidden");
+    document.body.style.overflow = "";
   }
 
   function bind3dDrag() {

@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="canonical" href="https://boxfitcalculator.com/">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="styles.css">
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4860007029459271"
@@ -24,7 +24,8 @@
 <body>
   <header class="site-header">
     <div class="container">
-      <h1>BoxFit Calculator</h1>
+      <img src="boxfit-logo-icon.svg" alt="Box Fit Calculator logo icon" class="brand-logo-icon">
+      <h1>Box Fit Calculator</h1>
       <p>Check whether items fit in a box, or find the smallest box that fits.</p>
     </div>
   </header>
@@ -260,11 +261,21 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p class="footer-line">BoxFitCalculator.com</p>
+      <img src="boxfit-logo.svg" alt="Box Fit Calculator logo mark" class="footer-app-logo">
+      <a id="privacyPolicyLink" href="privacy.html" class="footer-link">Privacy Policy</a>
       <p class="footer-line">&copy; <span id="year"></span> Calypso Pixels</p>
-      <img src="calypso-pixels-logo.svg" alt="Calypso Pixels logo" class="footer-logo">
     </div>
   </footer>
+
+  <div id="privacyModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="privacyModalTitle">Privacy Policy</h2>
+        <button id="privacyModalClose" type="button" class="modal-close" aria-label="Close privacy policy">X</button>
+      </div>
+      <iframe id="privacyFrame" src="privacy.html" class="privacy-frame" title="Privacy Policy"></iframe>
+    </div>
+  </div>
 
   <script src="packer.js"></script>
   <script src="app.js"></script>
