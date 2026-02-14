@@ -335,11 +335,11 @@
     var v = values || {};
     var tr = document.createElement("tr");
     tr.innerHTML = ""
-      + "<td><div class='measure-input'><input class='item-l measure-number' type='number' min='0.01' step='0.01' aria-label='Item length' value='" + escapeAttr(v.l) + "'><span class='unit-suffix'>in</span></div></td>"
-      + "<td><div class='measure-input'><input class='item-w measure-number' type='number' min='0.01' step='0.01' aria-label='Item width' value='" + escapeAttr(v.w) + "'><span class='unit-suffix'>in</span></div></td>"
-      + "<td><div class='measure-input'><input class='item-h measure-number' type='number' min='0.01' step='0.01' aria-label='Item height' value='" + escapeAttr(v.h) + "'><span class='unit-suffix'>in</span></div></td>"
-      + "<td><input class='item-qty' type='number' min='1' step='1' aria-label='Item quantity' value='" + escapeAttr(v.qty || 1) + "'></td>"
-      + "<td><button type='button' class='btn remove-btn remove-item'>Remove</button></td>";
+      + "<td data-label='Length'><div class='measure-input'><input class='item-l measure-number' type='number' min='0.01' step='0.01' aria-label='Item length' value='" + escapeAttr(v.l) + "'><span class='unit-suffix'>in</span></div></td>"
+      + "<td data-label='Width'><div class='measure-input'><input class='item-w measure-number' type='number' min='0.01' step='0.01' aria-label='Item width' value='" + escapeAttr(v.w) + "'><span class='unit-suffix'>in</span></div></td>"
+      + "<td data-label='Height'><div class='measure-input'><input class='item-h measure-number' type='number' min='0.01' step='0.01' aria-label='Item height' value='" + escapeAttr(v.h) + "'><span class='unit-suffix'>in</span></div></td>"
+      + "<td data-label='Quantity'><input class='item-qty' type='number' min='1' step='1' aria-label='Item quantity' value='" + escapeAttr(v.qty || 1) + "'></td>"
+      + "<td data-label='Action'><button type='button' class='btn remove-btn remove-item'>Remove</button></td>";
     el.itemRows.appendChild(tr);
     updateUnitSuffixes();
   }
@@ -348,10 +348,10 @@
     var v = values || {};
     var tr = document.createElement("tr");
     tr.innerHTML = ""
-      + "<td><div class='measure-input'><input class='cand-l measure-number' type='number' min='0.01' step='0.01' aria-label='Candidate length' value='" + escapeAttr(v.l) + "'><span class='unit-suffix'>in</span></div></td>"
-      + "<td><div class='measure-input'><input class='cand-w measure-number' type='number' min='0.01' step='0.01' aria-label='Candidate width' value='" + escapeAttr(v.w) + "'><span class='unit-suffix'>in</span></div></td>"
-      + "<td><div class='measure-input'><input class='cand-h measure-number' type='number' min='0.01' step='0.01' aria-label='Candidate height' value='" + escapeAttr(v.h) + "'><span class='unit-suffix'>in</span></div></td>"
-      + "<td><button type='button' class='btn remove-btn remove-candidate'>Remove</button></td>";
+      + "<td data-label='Length'><div class='measure-input'><input class='cand-l measure-number' type='number' min='0.01' step='0.01' aria-label='Candidate length' value='" + escapeAttr(v.l) + "'><span class='unit-suffix'>in</span></div></td>"
+      + "<td data-label='Width'><div class='measure-input'><input class='cand-w measure-number' type='number' min='0.01' step='0.01' aria-label='Candidate width' value='" + escapeAttr(v.w) + "'><span class='unit-suffix'>in</span></div></td>"
+      + "<td data-label='Height'><div class='measure-input'><input class='cand-h measure-number' type='number' min='0.01' step='0.01' aria-label='Candidate height' value='" + escapeAttr(v.h) + "'><span class='unit-suffix'>in</span></div></td>"
+      + "<td data-label='Action'><button type='button' class='btn remove-btn remove-candidate'>Remove</button></td>";
     el.candRows.appendChild(tr);
     updateUnitSuffixes();
   }
@@ -671,11 +671,11 @@
     finder.ranked.forEach(function (row, index) {
       var tr = document.createElement("tr");
       tr.innerHTML = ""
-        + "<td>" + (index + 1) + "</td>"
-        + "<td>" + row.label + " (" + dimsText(row.candidate, unit, 2) + ")</td>"
-        + "<td>" + fmt(volDisplay(row.volume, unit), 2) + " " + (unit === "in" ? "in^3" : "cm^3") + "</td>"
-        + "<td>" + (row.fits ? "Yes" : "No") + "</td>"
-        + "<td>" + (row.fits ? (fmt(row.result.efficiency, 2) + "%") : "-") + "</td>";
+        + "<td data-label='Rank'>" + (index + 1) + "</td>"
+        + "<td data-label='Candidate'>" + row.label + " (" + dimsText(row.candidate, unit, 2) + ")</td>"
+        + "<td data-label='Volume'>" + fmt(volDisplay(row.volume, unit), 2) + " " + (unit === "in" ? "in^3" : "cm^3") + "</td>"
+        + "<td data-label='Fits'>" + (row.fits ? "Yes" : "No") + "</td>"
+        + "<td data-label='Efficiency'>" + (row.fits ? (fmt(row.result.efficiency, 2) + "%") : "-") + "</td>";
       el.rankRows.appendChild(tr);
     });
   }
@@ -692,10 +692,10 @@
     pack.placements.forEach(function (p) {
       var tr = document.createElement("tr");
       tr.innerHTML = ""
-        + "<td>" + p.label + "</td>"
-        + "<td>" + p.copyIndex + "</td>"
-        + "<td>" + posText(p.position, unit) + "</td>"
-        + "<td>" + dimsText(p.size, unit, 2) + "</td>";
+        + "<td data-label='Item'>" + p.label + "</td>"
+        + "<td data-label='Copy'>" + p.copyIndex + "</td>"
+        + "<td data-label='Position'>" + posText(p.position, unit) + "</td>"
+        + "<td data-label='Orientation'>" + dimsText(p.size, unit, 2) + "</td>";
       el.placeRows.appendChild(tr);
     });
   }

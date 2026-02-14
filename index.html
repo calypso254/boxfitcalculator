@@ -10,6 +10,9 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://boxfitcalculator.com/">
   <meta property="og:site_name" content="BoxFit Calculator">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="canonical" href="https://boxfitcalculator.com/">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="styles.css">
@@ -62,36 +65,36 @@
               <th scope="col">Width</th>
               <th scope="col">Height</th>
               <th scope="col">Exterior Thickness</th>
-              <th scope="col">Action</th>
+              <th scope="col" class="action-col"><span class="sr-only">Action</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td data-label="Length">
                 <div class="measure-input">
                   <input id="fitContainerL" class="measure-number" type="number" min="0.01" step="0.01" value="12" inputmode="decimal">
                   <span class="unit-suffix">in</span>
                 </div>
               </td>
-              <td>
+              <td data-label="Width">
                 <div class="measure-input">
                   <input id="fitContainerW" class="measure-number" type="number" min="0.01" step="0.01" value="10" inputmode="decimal">
                   <span class="unit-suffix">in</span>
                 </div>
               </td>
-              <td>
+              <td data-label="Height">
                 <div class="measure-input">
                   <input id="fitContainerH" class="measure-number" type="number" min="0.01" step="0.01" value="8" inputmode="decimal">
                   <span class="unit-suffix">in</span>
                 </div>
               </td>
-              <td>
+              <td data-label="Exterior Thickness">
                 <div class="measure-input">
                   <input id="paddingInput" class="measure-number" type="number" min="0" step="0.001" value="0.125" inputmode="decimal">
                   <span class="unit-suffix">in</span>
                 </div>
               </td>
-              <td><button id="applyCustomBtn" type="button" class="btn secondary">Apply</button></td>
+              <td data-label="Action"><button id="applyCustomBtn" type="button" class="btn secondary">Apply</button></td>
             </tr>
           </tbody>
         </table>
@@ -104,19 +107,19 @@
           <thead>
             <tr>
               <th scope="col">Box Presets</th>
-              <th scope="col">Action</th>
+              <th scope="col" class="action-col"><span class="sr-only">Action</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td data-label="Box Presets">
                 <div class="measure-input">
                   <select id="presetSelect" class="measure-select" aria-describedby="presetStatus">
                     <option value="">Loading presets...</option>
                   </select>
                 </div>
               </td>
-              <td><button id="applyPresetBtn" type="button" class="btn secondary">Apply Preset</button></td>
+              <td data-label="Action"><button id="applyPresetBtn" type="button" class="btn secondary">Apply Preset</button></td>
             </tr>
           </tbody>
         </table>
@@ -134,7 +137,7 @@
               <th scope="col">Length</th>
               <th scope="col">Width</th>
               <th scope="col">Height</th>
-              <th scope="col">Action</th>
+              <th scope="col" class="action-col"><span class="sr-only">Action</span></th>
             </tr>
           </thead>
           <tbody id="candidateRows"></tbody>
@@ -154,13 +157,13 @@
               <th scope="col">Width</th>
               <th scope="col">Height</th>
               <th scope="col">Quantity</th>
-              <th scope="col">Action</th>
+              <th scope="col" class="action-col"><span class="sr-only">Action</span></th>
             </tr>
           </thead>
           <tbody id="itemRows"></tbody>
         </table>
       </div>
-      <button id="addItemBtn" type="button" class="btn secondary">Add Item</button>
+      <button id="addItemBtn" type="button" class="btn secondary add-row-btn">Add Item</button>
     </section>
 
     <section class="panel">
@@ -263,6 +266,7 @@
     <div class="container">
       <p class="footer-line">BoxFitCalculator.com</p>
       <p class="footer-line">&copy; <span id="year"></span> Calypso Pixels</p>
+      <img src="calypso-pixels-logo.svg" alt="Calypso Pixels logo" class="footer-logo">
     </div>
   </footer>
 
